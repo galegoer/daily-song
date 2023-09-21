@@ -14,14 +14,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import com.mongodb.app.R
 //import com.mongodb.app.data.MockRepository
 //import com.mongodb.app.presentation.tasks.AddItemViewModel
-import com.mongodb.app.ui.theme.MyApplicationTheme
 import com.mongodb.app.ui.theme.Purple200
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
@@ -34,9 +36,12 @@ import coil.request.ImageRequest
 
 
 @Composable
-fun AddItemPrompt() {
+fun HomePage() {
+    var popupControl by remember { mutableStateOf(false) }
+
     Column (
-        Modifier.background(Color.LightGray)
+        Modifier
+            .background(Color.LightGray)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(
@@ -56,7 +61,9 @@ fun AddItemPrompt() {
             placeholder = painterResource(R.drawable.ic_baseline_wifi_off_24_white),
             contentDescription = "Description",
             contentScale = ContentScale.Crop,
-            modifier = Modifier.height(300.dp).width(300.dp)
+            modifier = Modifier
+                .height(300.dp)
+                .width(300.dp)
                 .padding(16.dp)
                 .clip(shape = RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         )
@@ -85,24 +92,13 @@ fun AddItemPrompt() {
             }
             Button(
                 colors = buttonColors(containerColor = Purple200),
-                onClick = {
-                }
+                onClick = { popupControl = true }
             ) {
-                // TODO: Add Functionality for Popup to rate
                 Text(text = "Rate Today's Song")
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AddItemPreview() {
-    MyApplicationTheme {
-        MyApplicationTheme {
-//            val repository = MockRepository()
-//            val viewModel = AddItemViewModel(repository)
-            AddItemPrompt()
+        if (popupControl) {
+            SmileyPopup(onDismissRequest = { popupControl = false})
         }
     }
 }
