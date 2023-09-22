@@ -2,6 +2,7 @@ package com.mongodb.app.data
 
 import com.mongodb.app.domain.Item
 import com.mongodb.app.app
+import com.mongodb.app.domain.Song
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.mongodb.User
@@ -74,6 +75,12 @@ interface SyncRepository {
      * Closes the realm instance held by this repository.
      */
     fun close()
+
+    /**
+     * Returns the song of the day.
+     */
+    fun getDailySong(): Song
+
 }
 
 /**
@@ -113,6 +120,10 @@ class RealmSyncRepository(
         return realm.query<Item>()
             .sort(Pair("_id", Sort.ASCENDING))
             .asFlow()
+    }
+
+    override fun getDailySong(): Song {
+        return realm.query<Song>("song_of_day == true").find().first()
     }
 
     override suspend fun toggleIsComplete(task: Item) {
@@ -195,6 +206,7 @@ class MockRepository : SyncRepository {
     override fun resumeSync() = Unit
     override fun isTaskMine(task: Item): Boolean = task.owner_id == MOCK_OWNER_ID_MINE
     override fun close() = Unit
+    override fun getDailySong(): Song = Song()
 
     companion object {
         const val MOCK_OWNER_ID_MINE = "A"
