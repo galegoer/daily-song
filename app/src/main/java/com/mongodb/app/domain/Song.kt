@@ -2,21 +2,32 @@ package com.mongodb.app.domain
 
 import org.mongodb.kbson.ObjectId
 import io.realm.kotlin.types.RealmObject
+import io.realm.kotlin.types.annotations.Ignore
 import io.realm.kotlin.types.annotations.PrimaryKey
 import java.util.Date
 
-class Song() : RealmObject {
+open class Song() : RealmObject {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
 
-    var song_title: String = ""
+    var album: String? = null
     var artist: String = ""
-    var album: String = ""
-    var album_url: String = ""
-    var rating: Double = 0.0
-    var youtube_url: String = ""
-    var date_used: Date? = null
-    var song_of_day: Boolean = false
+    var image_url: String? = null
+    var song_of_day: Boolean? = null
+    var song_title: String = ""
+    var youtube_url: String? = null
+
+    constructor(song_title: String, artist: String) : this() {
+        this.song_title = song_title
+        this.artist = artist
+    }
+
+    // TODO: This may need to be changed
+//    @Ignore
+//    var date_used: Date? = null
+//    @Ignore
+//    var tags: Array<String> = arrayOf()
+    //    var rating: Double = 0.0
 
 
 //    TODO: May need to be incorporated later?

@@ -22,8 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import coil.compose.AsyncImage
 import com.mongodb.app.R
-//import com.mongodb.app.data.MockRepository
-//import com.mongodb.app.presentation.tasks.AddItemViewModel
 import com.mongodb.app.ui.theme.Purple200
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
@@ -33,11 +31,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.request.ImageRequest
+import com.mongodb.app.domain.Song
+import com.mongodb.app.presentation.home.HomeViewModel
 
 
 @Composable
-fun HomePage() {
+fun HomePage(
+    homeViewModel: HomeViewModel
+) {
     var popupControl by remember { mutableStateOf(false) }
+//    val song = homeViewModel.currSongState
+    val song = Song("temp", "tempo")
 
     Column (
         Modifier
@@ -55,7 +59,8 @@ fun HomePage() {
         )
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data("https://upload.wikimedia.org/wikipedia/en/8/8f/Blink-182_-_Blink-182_cover.jpg")
+//                .data("https://upload.wikimedia.org/wikipedia/en/8/8f/Blink-182_-_Blink-182_cover.jpg")
+                .data(song.image_url)
                 .crossfade(true)
                 .build(),
             placeholder = painterResource(R.drawable.ic_baseline_wifi_off_24_white),
@@ -68,15 +73,15 @@ fun HomePage() {
                 .clip(shape = RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
         )
         Text(
-            text = "Song Name",
+            text = "Song Title: " + song.song_title,
             fontSize = 24.sp,
         )
         Text(
-            text = "Artist Name",
+            text = "Artist: " + song.artist,
             fontSize = 24.sp,
         )
         Text(
-            text = "Album Name",
+            text = "Album: " + song.album,
             fontSize = 24.sp,
         )
         Row(
@@ -102,3 +107,18 @@ fun HomePage() {
         }
     }
 }
+
+//@Preview(showBackground = true)
+//@Composable
+//fun HomePreview() {
+//    MyApplicationTheme {
+//        val repository = SyncRepository()
+//        val tasks = (1..30).map { index ->
+//            MockRepository.getMockTask(index)
+//        }.toMutableStateList()
+//
+//        MyApplicationTheme {
+//            TaskList(repository, TaskViewModel(repository, tasks))
+//        }
+//    }
+//}
